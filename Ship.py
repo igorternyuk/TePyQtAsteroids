@@ -12,26 +12,33 @@ class Ship( Entity ):
         self.game = game
         self.image = QPixmap("spaceship.png")
         self.angle = 0
+        self.VELOCITY = 20
+        self.lives = 3
+
+    def is_alive( self ):
+        return self.lives > 0
 
     def handleUserInput( self, key_state ):
         #Rotation
         if key_state[ Keys.KEY_ROTATE_CLOCKWISE ]:
             self.angle += 2
             self.angle %= 360
-            print( self.angle )
         elif key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ]:
             self.angle -= 2
             self.angle %= 360
-            print( self.angle )
-
+        #Translation
         if key_state[ Keys.KEY_MOVE_FORWARD ]:
-            self.velocity.x = 20 * sin( radians( self.angle ) )
-            self.velocity.y = -20 * cos( radians( self.angle ) )
-            print( self.angle )
+            self.velocity.x = self.VELOCITY * sin( radians( self.angle ) )
+            self.velocity.y = -self.VELOCITY * cos( radians( self.angle ) )
         elif key_state[ Keys.KEY_MOVE_BACKWARD ]:
-            self.velocity.x = -20 * sin( radians( self.angle ) )
-            self.velocity.y = 20 * cos( radians( self.angle ) )
-            print( self.angle )
+            self.velocity.x = -self.VELOCITY * sin( radians( self.angle ) )
+            self.velocity.y = self.VELOCITY * cos( radians( self.angle ) )
+        elif key_state[ Keys.KEY_MOVE_TO_THE_LEFT ]:
+            self.velocity.x = -self.VELOCITY * cos( radians( self.angle ) )
+            self.velocity.y = -self.VELOCITY * sin( radians( self.angle ) )
+        elif key_state[ Keys.KEY_MOVE_TO_THE_RIGHT ]:
+            self.velocity.x = self.VELOCITY * cos( radians( self.angle ) )
+            self.velocity.y = self.VELOCITY * sin( radians( self.angle ) )
         else:
             self.velocity.x = 0
             self.velocity.y = 0
