@@ -8,7 +8,7 @@ from Game import*
 TITLE_OF_PROGRAM = "TePyQtAsteroids"
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
-TIMER_DELAY = 100
+TIMER_DELAY = 34
 
 class MainWindow( QMainWindow ):
     def __init__( self ):
@@ -16,7 +16,6 @@ class MainWindow( QMainWindow ):
         self.init_UI()
 
     def init_UI( self ):
-        self.key_state = KeyState()
         self.canvas = Canvas( self )
         self.setCentralWidget( self.canvas )
         self.setWindowTitle( TITLE_OF_PROGRAM )
@@ -35,35 +34,44 @@ class Canvas( QFrame ):
     def __init__( self, parent = None ):
         super().__init__( parent )
         self.setFocusPolicy( Qt.StrongFocus )
+        self.key_state = {}
+        self.reset_keys()
         self.game = Game( WINDOW_WIDTH, WINDOW_HEIGHT )
         self.timer = QBasicTimer()
         self.timer.start( TIMER_DELAY, self )
 
+    def reset_keys( self ):
+        self.key_state[ Keys.KEY_MOVE_FORWARD ] = False
+        self.key_state[ Keys.KEY_MOVE_BACKWARD ] = False
+        self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = False
+        self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = False
+        self.key_state[ Keys.KEY_FIRE ] = False
+
     def keyPressEvent( self, event ):
         key = event.key()
         if key == Qt.Key_Left:
-            self.parent().key_state.set( Keys.KEY_ROTATE_COUNTERCLOCKWISE )
+            self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = True
         elif key == Qt.Key_Right:
-            self.parent().key_state.set( Keys.KEY_ROTATE_CLOCKWISE )
+            self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = True
         elif key == Qt.Key_Up:
-            self.parent().key_state.set( Keys.KEY_MOVE_FORWARD )
+            self.key_state[ Keys.KEY_MOVE_FORWARD ] = True
         elif key == Qt.Key_Down:
-            self.parent().key_state.set( Keys.KEY_MOVE_BACKWARD )
+            self.key_state[ Keys.KEY_MOVE_BACKWARD ] = True
         elif key == Qt.Key_F:
-            self.parent().key_state.set( Keys.KEY_FIRE )
+            self.key_state[ Keys.KEY_FIRE ] = True
 
     def keyReleaseEvent( self, event ):
         key = event.key()
         if key == Qt.Key_Left:
-            self.parent().key_state.reset( Keys.KEY_ROTATE_COUNTERCLOCKWISE )
+            self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = False
         elif key == Qt.Key_Right:
-            self.parent().key_state.reset( Keys.KEY_ROTATE_CLOCKWISE )
+            self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = False
         elif key == Qt.Key_Up:
-            self.parent().key_state.reset( Keys.KEY_MOVE_FORWARD )
+            self.key_state[ Keys.KEY_MOVE_FORWARD ] = False
         elif key == Qt.Key_Down:
-            self.parent().key_state.reset( Keys.KEY_MOVE_BACKWARD )
+            self.key_state[ Keys.KEY_MOVE_BACKWARD ] = False
         elif key == Qt.Key_F:
-            self.parent().key_state.reset( Keys.KEY_FIRE )
+            self.key_state[ Keys.KEY_FIRE ] = False
 
     def paintEvent( self, event ):
         painter = QPainter( self )
@@ -71,8 +79,8 @@ class Canvas( QFrame ):
 
     def timerEvent( self, event ):
         if event.timerId() == self.timer.timerId():
-            self.game.user_input_phase( self.parent().key_state )
-            self.game.update()
+            self.game.user_input_phase( self.key_state )
+            self.game.update_phase()
             self.update()
 
 if __name__ == '__main__':

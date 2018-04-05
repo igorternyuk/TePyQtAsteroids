@@ -15,25 +15,31 @@ class Ship( Entity ):
 
     def handleUserInput( self, key_state ):
         #Rotation
-        if key_state.get( Keys.KEY_ROTATE_CLOCKWISE ):
-            self.angle += 1
-        elif key_state.get( Keys.KEY_ROTATE_COUNTERCLOCKWISE ):
-            self.angle -= 1
+        if key_state[ Keys.KEY_ROTATE_CLOCKWISE ]:
+            self.angle += 2
+            self.angle %= 360
+            print( self.angle )
+        elif key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ]:
+            self.angle -= 2
+            self.angle %= 360
+            print( self.angle )
 
-        if key_state.get( Keys.KEY_MOVE_FORWARD ):
-            self.velocity.x = 20 * cos( radians( self.angle ) )
-            self.velocity.y = 20 * sin( radians( self.angle ) )
-        elif key_state.get( Keys.KEY_MOVE_BACKWARD ):
-            self.velocity.x = -20 * cos( radians( self.angle ) )
-            self.velocity.y = -20 * sin( radians( self.angle ) )
+        if key_state[ Keys.KEY_MOVE_FORWARD ]:
+            self.velocity.x = 20 * sin( radians( self.angle ) )
+            self.velocity.y = -20 * cos( radians( self.angle ) )
+            print( self.angle )
+        elif key_state[ Keys.KEY_MOVE_BACKWARD ]:
+            self.velocity.x = -20 * sin( radians( self.angle ) )
+            self.velocity.y = 20 * cos( radians( self.angle ) )
+            print( self.angle )
         else:
             self.velocity.x = 0
             self.velocity.y = 0
 
     def update( self ):
-        self.super().update()
+        super().update()
 
-    def render( painter ):
+    def render( self, painter ):
         painter.save()
         dx = self.position.x + self.image.width() / 2
         dy = self.position.y + self.image.height() / 2
@@ -41,5 +47,5 @@ class Ship( Entity ):
         painter.rotate( self.angle )
         w = self.image.width()
         h = self.image.height()
-        painter.drawPixmap( QRect(-w / 2, -h / 2, w, h ), self.image )
+        painter.drawPixmap( QRect(-w / 4, -h / 4, w / 2, h / 2 ), self.image )
         painter.restore()
