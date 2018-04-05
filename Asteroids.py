@@ -63,8 +63,7 @@ class Canvas( QFrame ):
             self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = True
         elif key == Qt.Key_Down:
             self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = True
-
-        elif key == Qt.Key_F:
+        elif key == Qt.Key_Space:
             self.key_state[ Keys.KEY_FIRE ] = True
 
     def keyReleaseEvent( self, event ):
@@ -81,6 +80,8 @@ class Canvas( QFrame ):
             self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = False
         elif key == Qt.Key_Down:
             self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = False
+        elif key == Qt.Key_Space:
+            self.key_state[ Keys.KEY_FIRE ] = False
 
     def paintEvent( self, event ):
         painter = QPainter( self )

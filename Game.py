@@ -56,6 +56,8 @@ class Game:
 
     def update_phase( self ):
         self.ship.update()
+        self.entities = [ e for e in self.entities if e.is_alive() ]
+        print(" entities.size = ", len( self.entities ))
         for e in self.entities:
             e.update()
 

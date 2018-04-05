@@ -5,6 +5,7 @@ from Entity import*
 from Vector2D import*
 from Game import*
 from KeyState import*
+from Projectile import*
 
 class Ship( Entity ):
     def __init__( self, game, position, velocity = Vector2D( 0, 0) ):
@@ -19,6 +20,8 @@ class Ship( Entity ):
         return self.lives > 0
 
     def handleUserInput( self, key_state ):
+        if key_state[ Keys.KEY_FIRE ]:
+            self.fire()
         #Rotation
         if key_state[ Keys.KEY_ROTATE_CLOCKWISE ]:
             self.angle += 2
@@ -42,6 +45,18 @@ class Ship( Entity ):
         else:
             self.velocity.x = 0
             self.velocity.y = 0
+
+    def fire( self ):
+        angle_rad = radians( self.angle )
+        x = self.position.x  + self.image.width() / 2 + 60 * sin( angle_rad )
+        y = self.position.y  + self.image.height() / 2  - 60 * cos( angle_rad )
+        vx = 20 * sin( angle_rad )
+        vy = -20 * cos( angle_rad )
+        position = Vector2D( x, y )
+        velocity = Vector2D( vx, vy )
+        print("FIRE")
+        print("projectile = ", position )
+        self.game.entities.append( Projectile( self.game, position, velocity, self.angle ) )
 
     def update( self ):
         super().update()
