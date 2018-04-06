@@ -63,11 +63,18 @@ class Canvas( QFrame ):
             self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = True
         elif key == Qt.Key_Down:
             self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = True
-        elif key == Qt.Key_Space:
+        elif key == Qt.Key_F:
             self.key_state[ Keys.KEY_FIRE ] = True
 
     def keyReleaseEvent( self, event ):
         key = event.key()
+        if key == Qt.Key_N:
+            self.game.reset()
+        elif key == Qt.Key_Space:
+            if self.timer.isActive():
+                self.timer.stop()
+            else:
+                self.timer.start( TIMER_DELAY, self )
         if key == Qt.Key_A or key == Qt.Key_Left:
             self.key_state[ Keys.KEY_MOVE_TO_THE_LEFT ] = False
         elif key == Qt.Key_D or key == Qt.Key_Right:
@@ -80,7 +87,7 @@ class Canvas( QFrame ):
             self.key_state[ Keys.KEY_ROTATE_COUNTERCLOCKWISE ] = False
         elif key == Qt.Key_Down:
             self.key_state[ Keys.KEY_ROTATE_CLOCKWISE ] = False
-        elif key == Qt.Key_Space:
+        elif key == Qt.Key_F:
             self.key_state[ Keys.KEY_FIRE ] = False
 
     def paintEvent( self, event ):

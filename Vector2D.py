@@ -43,3 +43,19 @@ class Vector2D:
 
     def __str__( self ):
         return "(%8.3e, %8.3e)" % ( self.x, self.y )
+
+"""
+import types
+
+if type(a) is types.DictType:
+    do_something()
+if type(b) in types.StringTypes:
+    do_something_else()
+
+Using isinstance():
+
+if isinstance(a, dict):
+    do_something()
+if isinstance(b, str) or isinstance(b, unicode):
+    do_something_else()
+"""

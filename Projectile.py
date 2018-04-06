@@ -15,9 +15,7 @@ class Projectile( Entity ):
     def update( self ):
         super().update()
         if ( self.position.x <= 0 or self.position.x > self.game.field_width or self.position.y <= 0 or self.position.y > self.game.field_height ):
-            print("Removing projectile")
             self.alive = False
-            print("self.alive = ", self.is_alive() )
 
     def render( self, painter ):
         painter.save()
